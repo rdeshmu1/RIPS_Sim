@@ -2,23 +2,23 @@
 clear; clc;
 
 %%
-%start with basic assumptions 
-
-load Temp_Alt_Fit;
-%altitude of mission
-altitude = [400:-5:0]*1000; %m
-
-%pressure range
+% %start with basic assumptions 
+% 
+% load Temp_Alt_Fit;
+% %altitude of mission
+depth = [400:-5:0]*1000; %m
+% 
+% %pressure range
 pressure = [.01:.1236:10]*100000; %Pa
-
-%altitude = [400:-25:0]*1000;
-%temperature = [105, 95, 85, 80, 75, 80, 90, 100, 120, 150, 160, 180, 200, 220, 250, 275, 300];
-
-%density model
-rho = pressure./((8.315.*Temp_Alt_Fit(altitude))');
-plot(-altitude, rho)
-xlabel('Altitude (m)')
-ylabel('Density (kg/m^3)')
+% 
+% %altitude = [400:-25:0]*1000;
+% %temperature = [105, 95, 85, 80, 75, 80, 90, 100, 120, 150, 160, 180, 200, 220, 250, 275, 300];
+% 
+% %density model
+% rho = pressure./((8.315.*Temp_Alt_Fit(altitude))');
+% plot(-altitude, rho)
+% xlabel('Altitude (m)')
+% ylabel('Density (kg/m^3)')
 
 %%
 %initial conditions for maximum profile
@@ -28,10 +28,11 @@ T = 0;
 %gravity
 g = 10.4; % m/s2
 
-x_probe=zeros([1 length(altitude)]); %m
-v_probe=zeros([1 length(altitude)]); %m/s
-a_probe=zeros([1 length(altitude)]); %m/s
-Fd_probe=zeros([1 length(altitude)]);
+x_probe=zeros([1 length(depth)]); %m
+v_probe=zeros([1 length(depth)]); %m/s
+a_probe=zeros([1 length(depth)]); %m/s
+Fd_probe=zeros([1 length(depth)]);
+rho = zeros([1 length(depth)]);
 delta_t = 100;
 
 %initial probe conditions
@@ -43,22 +44,16 @@ Cd_probe=1.3;
 
 %%
 for i=1:length(rho)
-if altitude(i) < 200000 && altitude(i) >= 150000
-    rho(i) = rho(i) * (17/1000); %molar mass of NH3
     
-elseif altitude(i) < 150000 && altitude(i) >= 100000
-    rho(i) = rho(i) * (51/1000); %molar mass of nh4sh
-    
-%this is solid 
-elseif altitude(i) < 100000 && altitude(i) >= 0
-    rho(i) = rho(i) * (917); %molar mass h20
+if depth(i) <= 400000 && depth(i) > 200000
+    rho(i) = 0; %molar mass of NH3
     
 else
-    rho(i) = rho(i) * 0;
+    rho(i) = .73;
 end
 end
 
-plot(-altitude, rho)
+plot(-depth, rho)
 xlabel('Altitude (m)')
 ylabel('Density (kg/m^3)')
 
@@ -66,7 +61,7 @@ ylabel('Density (kg/m^3)')
 % rho in units of kg/m3
 
 %% 
-for q=2:length(altitude)
+for q=2:length(depth)
     
     if pressure(q) > 100000
         A_probe = 50; % m2

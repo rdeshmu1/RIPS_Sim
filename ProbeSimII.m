@@ -2,30 +2,29 @@
 clear; clc;
 
 %%
-rad = [60000 50000 40000 0];
+rad = [60000 50000 40000 0]*1000;
 den = [0 500 1000 3500];
 
 %%
 
 load Linear_density
 %altitude of mission
-depth = [0:5:400]*100; %m
+depth = [0:5:400]*1000; %m
 rho = Linear_density(depth);
 
 %pressure range
 pressure = [.01:.1236:10]*100000; %Pa
-% 
+
 % altitude = [400:-25:0]*100;
 % temperature = [105, 95, 85, 80, 75, 80, 90, 100, 120, 150, 160, 180, 200, 220, 250, 275, 300];
-% 
-% %density model
-%rho = pressure./((287.*Temp_Alt(depth))');
+
 
 %%
 %initial conditions for maximum profile
 
 %tension
 T = 0;
+
 %gravity
 g = 10.4; % m/s2
 
@@ -43,10 +42,6 @@ Cd_probe=1.3;
 
 %% 
 for q=2:length(depth)
-    
-    if depth(q) > 200000
-        rho(q) = .73;
-    end
     
     if pressure(q) > 100000
         A_probe = 50; % m2
@@ -66,13 +61,13 @@ end
 %post parachute deployment 
 
 ripcord=1000;
-Torque = 78;
+%Torque = shit from Jake 
 R_spool = 2;
 
-
+Cd_parachute = 1.4; 
 v_parachute=zeros([1 1000]); %m/s
 Fd_parachute=zeros([1 1000]);
-
+A_parachute = 10; 
 
 %initial velocity at deployment 
 
@@ -89,7 +84,8 @@ for l=2:ripcord
    
     v_parachute = sqrt((2*Fd_parachute)/(rho*Cd*A_parachute));
    
-  
+    
+    
     %probe iteration
     Fd_probe_pd(q)= 1/2*Cd_probe*rho(q)*v_probe(q-1)^2*A_probe;
     a_probe_pd(q)= (m_probe*g-Fd_probe_pd(q)-T)/m_probe;

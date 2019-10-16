@@ -1,17 +1,17 @@
 clear; clc;
 
-m=5; % mass in kg
-g=9.81; % gravity acceleration kg/m3
-rho=1.2; % Air density
-Cd=.4;
-A=.09;
+m=5; % kg
+g=9.81; % kg/m2
+rho=1.2; % kg/m^3
+Cd=.4; %drag coeff
+A=.09;%m^2
 
-c=1/2*rho*Cd*A;
+c=1/2*rho*Cd*A; %drag force constant
 
 %Time step
 V=zeros(1,100); % Speed
-F=zeros(1,100);
-a=zeros(1,100);
+F=zeros(1,100); %force of drag
+a=zeros(1,100); %total accel
 
 V(1)=0;
 deltat=1;

@@ -2,15 +2,17 @@
 clear; clc;
 
 %%
-rad = [60000 50000 40000 0]*1000;
-den = [0 500 1000 3500];
+rad = [50000 50700]*1000;
+den = [400 10];
+[a, b] = polyfit(rad, den, 1);
 
-%%
-
-load Linear_density
 %altitude of mission
 depth = [0:5:400]*1000; %m
-rho = Linear_density(depth);
+
+%rho = a(1).*depth + a(2);
+rho = .83; %density of ammonia
+
+%%
 
 %pressure range
 pressure = [.01:.1236:10]*100000; %Pa
@@ -48,11 +50,11 @@ for q=2:length(depth)
     else 
         A_probe = .78;
     end
-    
+%     
     %probe iteration
-    Fd_probe(q)= 1/2*Cd_probe*rho(q)*v_probe(q-1)^2*A_probe;
+    v_probe(q)=v_probe(q-1)+a_probe(q-1)*delta_t;
+    Fd_probe(q)= 1/2*Cd_probe*rho*v_probe(q)^2*A_probe;
     a_probe(q)= (m_probe*g-Fd_probe(q))/m_probe;
-    v_probe(q)=v_probe(q-1)+a_probe(q)*delta_t;
     x_probe(q) = x_probe(q-1) + v_probe(q-1)*delta_t + 1/2*a_probe(q)*delta_t^2;
 
 end

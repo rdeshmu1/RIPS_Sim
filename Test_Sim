@@ -4,24 +4,28 @@ m=5; % kg
 g=9.81; % kg/m2
 rho=1.2; % kg/m^3
 Cd=.4; %drag coeff
-A=.09;%m^2
+A=.09; %m^2
 
 c=1/2*rho*Cd*A; %drag force constant
 
 %Time step
-V=zeros(1,100); % Speed
+v=zeros(1,100); % Speed
 F=zeros(1,100); %force of drag
 a=zeros(1,100); %total accel
+x=zeros(1,100);
 
-V(1)=0;
+v(1)=4000;
 deltat=1;
 
 for i=1:400
- 
-    V(i+1)=V(i)+deltat*a(i);
+   
+    F(i+1) = c * v(i)^2;
     
-    F(i+1) = c * V(i)^2;
+    a(i+1) = (g-F(i+1)/m);
     
-    a(i+1) = (g-c*V(i)^2);
+    v(i+1)=v(i)+deltat*a(i+1);
+    
+    %x(i+1) = x(i) + v(i+1)*delta_t + 1/2*a(i+1)*delta_t^2;
+    
     
 end

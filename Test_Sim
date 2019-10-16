@@ -1,0 +1,27 @@
+clear; clc;
+
+m=5; % mass in kg
+g=9.81; % gravity acceleration kg/m3
+rho=1.2; % Air density
+Cd=.4;
+A=.09;
+
+c=1/2*rho*Cd*A;
+
+%Time step
+V=zeros(1,100); % Speed
+F=zeros(1,100);
+a=zeros(1,100);
+
+V(1)=0;
+deltat=1;
+
+for i=1:400
+ 
+    V(i+1)=V(i)+deltat*a(i);
+    
+    F(i+1) = c * V(i)^2;
+    
+    a(i+1) = (g-c*V(i)^2);
+    
+end

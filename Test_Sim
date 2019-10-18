@@ -16,22 +16,24 @@ F=zeros(1,length(z)); %force of drag
 a=zeros(1,length(z)); %total accel
 x=zeros(1,length(z));
 
-v(1)=-10;
+v(1)=-4000;
+
 deltat=1;
 
-for i=2:z
+for i=1:99
     
-    F(i) = c * v(i-1)^2;
-    
-    if F(i) > m*g
+    if (c*v(i)^2)>abs(m*g)
         F(i) = m*g;
+    else
+        F(i) = c * v(i)^2;
     end
     
     a(i) = (-g+F(i)/m);
     
-    v(i)=v(i-1)+deltat*a(i);
+    v(i+1)=v(i)+deltat*a(i);
     
     %x(i+1) = x(i) + v(i+1)*delta_t + 1/2*a(i+1)*delta_t^2;
+    
     
 end
 

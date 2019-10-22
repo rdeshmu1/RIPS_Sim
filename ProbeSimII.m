@@ -2,62 +2,72 @@
 clear; clc;
 
 %%
-rad = [50000 50700]*1000;
-den = [400 10];
-[a, b] = polyfit(rad, den, 1);
+%use linear density model 
 
-%altitude of mission
-depth = [0:5:400]*1000; %m
+%change iterations for more accuracy 
 
-%rho = a(1).*depth + a(2);
-rho = .83; %density of ammonia
+m=5; % kg
+g=9.81; % kg/m2
+
+z=72000000;
+
+Cd=.4; %drag coeff
+A_probe=.09; %m^2
+d=.3385;
+mu = 1.789E-5; %viscosity in Ns/m
+%http://www.aerodynamics4students.com/properties-of-the-atmosphere/sea-level-conditions.php
+
+v(1)=27000; %m/s
+deltat=.0001;
+time=deltat*z;
 
 %%
 
 %pressure range
 pressure = [.01:.1236:10]*100000; %Pa
 
-% altitude = [400:-25:0]*100;
-% temperature = [105, 95, 85, 80, 75, 80, 90, 100, 120, 150, 160, 180, 200, 220, 250, 275, 300];
-
-
 %%
 %initial conditions for maximum profile
 
-%tension
-T = 0;
-
-%gravity
-g = 10.4; % m/s2
-
-x_probe=zeros([1 length(depth)]); %m
-v_probe=zeros([1 length(depth)]); %m/s
-a_probe=zeros([1 length(depth)]); %m/s
-Fd_probe=zeros([1 length(depth)]);
-delta_t = 100;
+z=72000000;
+x_probe=zeros([1 length(z)]); %m
+v_probe=zeros([1 length(z)]); %m/s
+a_probe=zeros([1 length(z)]); %m/s
+Fd_probe=zeros([1 length(z)]);
 
 %initial probe conditions
-v_probe(1)= 13166.667; %m/s
+v_probe(1)= 27000; %m/s
 m_probe = 500; %kg
 Cd_probe=1.3;
 
 
 %% 
-for q=2:length(depth)
+for i=1:z
     
-    if pressure(q) > 100000
-        A_probe = 50; % m2
-    else 
-        A_probe = .78;
+    rho(i)=3000/500*x_probe(i);
+    
+   
+    Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
+    %force due to drag 
+    
+    if v_probe(i) < 0 
+        Fd_probe(i) = -Fd_probe(i);
     end
-%     
-    %probe iteration
-    v_probe(q)=v_probe(q-1)+a_probe(q-1)*delta_t;
-    Fd_probe(q)= 1/2*Cd_probe*rho*v_probe(q)^2*A_probe;
-    a_probe(q)= (m_probe*g-Fd_probe(q))/m_probe;
-    x_probe(q) = x_probe(q-1) + v_probe(q-1)*delta_t + 1/2*a_probe(q)*delta_t^2;
-
+    
+    %drag vector opposes velocity 
+    %ie if velocity is positive, drag vector is negative 
+    
+    a_probe(i) = (g-Fd_probe(i)/m); 
+    %new accelration 
+     
+    v_probe(i+1)=v_probe(i)+deltat*a_probe(i);
+    %assume constant a
+   
+    x_probe(i+1) = x_probe(i) + v_probe(i)*deltat + (a_probe(i)*deltat^2)/2;
+    %current position
+        
 end
+
 
 %%
 %post parachute deployment 
@@ -86,8 +96,6 @@ for l=2:ripcord
    
     v_parachute = sqrt((2*Fd_parachute)/(rho*Cd*A_parachute));
    
-    
-    
     %probe iteration
     Fd_probe_pd(q)= 1/2*Cd_probe*rho(q)*v_probe(q-1)^2*A_probe;
     a_probe_pd(q)= (m_probe*g-Fd_probe_pd(q)-T)/m_probe;

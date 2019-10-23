@@ -47,6 +47,10 @@ for i=1:z
     rho(i)=3000/500*x_probe(i);
     
    
+    %Reynolds number
+    %Re(i) = (rho(i)*v(i)*d)/mu;
+    %new drag coeff calculations
+    
     Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
     %force due to drag 
     
@@ -67,8 +71,6 @@ for i=1:z
     %current position
         
 end
-
-
 
 %%
 %post parachute deployment 

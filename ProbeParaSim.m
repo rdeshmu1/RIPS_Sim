@@ -69,12 +69,14 @@ for i=1:z
 end
 
 
+
 %%
 %post parachute deployment 
 
-ripcord=1000;
-%Torque = shit from Jake 
-R_spool = 2;
+ripcord=1000; %m 
+Torque = 30; %Nm 
+%this value will change with time 
+R_spool = 2; %m
 
 Cd_parachute = 1.4; 
 v_parachute=zeros([1 1000]); %m/s
@@ -84,16 +86,17 @@ A_parachute = 10;
 %initial velocity at deployment 
 
 %pd = post deployment 
-x_probe_pd=zeros([1 ripcord]); %m
-v_probe_pd=zeros([1 ripcord]); %m/s
-a_probe_pd=zeros([1 ripcord]); %m/s
-Fd_probe_pd=zeros([1 ripcord]);
+x_probe_post_deployment = zeros([1 ripcord]); %m
+v_probe_post_deployment = zeros([1 ripcord]); %m/s
+a_probe_post_deployment = zeros([1 ripcord]); %m/s
+Fd_probe_post_deployment = zeros([1 ripcord]);
 
 
 for l=2:ripcord
     
     T_cord = Torque/R_spool;
    
+    Fd_parachute = T_cord;
     v_parachute = sqrt((2*Fd_parachute)/(rho*Cd*A_parachute));
    
     %probe iteration

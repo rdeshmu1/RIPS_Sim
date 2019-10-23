@@ -83,16 +83,17 @@ v_parachute=zeros([1 1000]); %m/s
 Fd_parachute=zeros([1 1000]);
 A_parachute = 10; 
 
-%initial velocity at deployment 
 
-%pd = post deployment 
+%post deployment 
 x_probe_post_deployment = zeros([1 ripcord]); %m
 v_probe_post_deployment = zeros([1 ripcord]); %m/s
 a_probe_post_deployment = zeros([1 ripcord]); %m/s
 Fd_probe_post_deployment = zeros([1 ripcord]);
 
+%initial velocity at deployment
+v_probe_post_deployment(1) = 12;
 
-for l=2:ripcord
+for l=1:ripcord
     
     T_cord = Torque/R_spool;
    
@@ -100,9 +101,25 @@ for l=2:ripcord
     v_parachute = sqrt((2*Fd_parachute)/(rho*Cd*A_parachute));
    
     %probe iteration
-    Fd_probe_pd(q)= 1/2*Cd_probe*rho(q)*v_probe(q-1)^2*A_probe;
-    a_probe_pd(q)= (m_probe*g-Fd_probe_pd(q)-T)/m_probe;
-    v_probe_pd(q)=v_probe_pd(q-1)+a_probe_pd(q)*delta_t;
-    x_probe_pd(q) = x_probe_pd(q-1) + v_probe_pd(q-1)*delta_t + 1/2*a_probe_pd(q)*delta_t^2;
+    rho(i)=3000/500*x_probe_post_deployment(i);
+    
+    Fd_probe_post_deployment(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe_post_deployment(i)^2;
+    %force due to drag 
+    
+    if v_probe(i) < 0 
+        Fd_probe_post_deployment(i) = -Fd_probe_post_deployment(i);
+    end
+    
+    %drag vector opposes velocity 
+    %ie if velocity is positive, drag vector is negative 
+    
+    a_probe_post_deployment(i) = (g-Fd_probe_post_deployment(i)/m); 
+    %new accelration 
+     
+    v_probe_post_deployment(i+1)=v_probe_post_deployment(i)+deltat*a_probe_post_deployment(i);
+    %assume constant a
+   
+    x_probe_post_deployment(i+1) = x_probe_post_deployment(i) + v_probe_post_deployment(i)*deltat + (a_probe_post_deployment(i)*deltat^2)/2;
+    %current position
 
 end

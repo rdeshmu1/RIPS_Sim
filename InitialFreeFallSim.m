@@ -25,7 +25,7 @@ F=zeros(1,z); %force of drag
 a=zeros(1,z); %total accel
 x=zeros(1,z);
 rho=zeros(1,z);
-Re= zeros(1,z);
+%Re= zeros(1,z);
 
 v(1)=27000; %m/s
 deltat=.0001;
@@ -35,7 +35,7 @@ time_hours = time/60/60;
 
 for i=1:z
     
-    rho(i)=3000/500*x(i);
+    rho(i)=(3000/60000000)*x(i);
     %model for rho based off of graphic of density near radius of Saturn 
     %https://oxfordre.com/planetaryscience/view/10.1093/acrefore/9780190647926.001.0001/acrefore-9780190647926-e-175
    

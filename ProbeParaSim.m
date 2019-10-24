@@ -44,30 +44,30 @@ Cd_probe=1.3;
 %%
 
 %total mission time, no deployment 
-for i=1:z
-    
-    rho(i)=(3000/60000000)*x_probe(i);
-    
-    Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
-    %force due to drag
-    
-    if v_probe(i) < 0
-        Fd_probe(i) = -Fd_probe(i);
-    end
-    
-    %drag vector opposes velocity
-    %ie if velocity is positive, drag vector is negative
-    
-    a_probe(i) = (g-Fd_probe(i)/m);
-    %new accelration
-    
-    v_probe(i+1)=v_probe(i)+deltat*a_probe(i);
-    %assume constant a
-    
-    x_probe(i+1) = x_probe(i) + v_probe(i)*deltat + (a_probe(i)*deltat^2)/2;
-    %current position
-    
-end
+% for i=1:z
+%     
+%     rho(i)=(3000/60000000)*x_probe(i);
+%     
+%     Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
+%     %force due to drag
+%     
+%     if v_probe(i) < 0
+%         Fd_probe(i) = -Fd_probe(i);
+%     end
+%     
+%     %drag vector opposes velocity
+%     %ie if velocity is positive, drag vector is negative
+%     
+%     a_probe(i) = (g-Fd_probe(i)/m);
+%     %new accelration
+%     
+%     v_probe(i+1)=v_probe(i)+deltat*a_probe(i);
+%     %assume constant a
+%     
+%     x_probe(i+1) = x_probe(i) + v_probe(i)*deltat + (a_probe(i)*deltat^2)/2;
+%     %current position
+%     
+% end
 
 
 %%
@@ -76,8 +76,8 @@ end
 ripcord=1000; %m
 Torque = 30; %Nm
 %this value will change with time
-
 R_spool = 2; %m
+
 
 Cd_parachute = 1.4;
 v_parachute=zeros([1 1000]); %m/s
@@ -86,10 +86,11 @@ A_parachute = 10;
 rho_parachute = 500;
 
 %post deployment
-x_probe_with_deployment = zeros([1 ripcord]); %m
-v_probe_with_deployment = zeros([1 ripcord]); %m/s
-a_probe_with_deployment = zeros([1 ripcord]); %m/s
-Fd_probe_with_deployment = zeros([1 ripcord]);
+x_probe_with_deployment = zeros(1, z); %m
+v_probe_with_deployment = zeros(1,z); %m/s
+a_probe_with_deployment = zeros(1,z); %m/s
+Fd_probe_with_deployment = zeros(1,z);
+rho=zeros(1,z);
 
 
 %initial velocity at deployment
@@ -103,7 +104,7 @@ for i=1:z
     Fd_probe_with_deployment(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe_with_deployment(i)^2;
     %force due to drag
     
-    if v_probe(i) < 0
+    if v_probe_with_deployment(i) < 0
         Fd_probe_with_deployment(i) = -Fd_probe_with_deployment(i);
     end
     

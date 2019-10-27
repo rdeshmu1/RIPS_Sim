@@ -44,27 +44,27 @@ Cd_probe=1.3;
 %%
 
 %total mission time, no deployment 
-% for i=1:z
-%     
-%     rho(i)=(3000/60000000)*x_probe(i);
-%     
-%     Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
-%     %force due to drag
-%     
-%     if v_probe(i) < 0
-%         Fd_probe(i) = -Fd_probe(i);
-%     end
-%     
-%     %drag vector opposes velocity
-%     %ie if velocity is positive, drag vector is negative
-%     
-%     a_probe(i) = (g-Fd_probe(i)/m);
-%     %new accelration
-%     
-%     v_probe(i+1)=v_probe(i)+deltat*a_probe(i);
-%     %assume constant a
-%     
-%     x_probe(i+1) = x_probe(i) + v_probe(i)*deltat + (a_probe(i)*deltat^2)/2;
+% % for i=1:z
+% %     
+% %     rho(i)=(3000/60000000)*x_probe(i);
+% %     
+% %     Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
+% %     %force due to drag
+% %     
+% %     if v_probe(i) < 0
+% %         Fd_probe(i) = -Fd_probe(i);
+% %     end
+% %     
+% %     %drag vector opposes velocity
+% %     %ie if velocity is positive, drag vector is negative
+% %     
+% %     a_probe(i) = (g-Fd_probe(i)/m);
+% %     %new accelration
+% %     
+% %     v_probe(i+1)=v_probe(i)+deltat*a_probe(i);
+% %     %assume constant a
+% %     
+% %     x_probe(i+1) = x_probe(i) + v_probe(i)*deltat + (a_probe(i)*deltat^2)/2;
 %     %current position
 %     
 % end

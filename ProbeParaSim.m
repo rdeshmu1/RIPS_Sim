@@ -95,7 +95,6 @@ rho=zeros(1,z);
 
 %initial velocity at deployment
 
-
 for i=1:z
     
     %probe iteration

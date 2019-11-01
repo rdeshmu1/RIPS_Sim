@@ -18,7 +18,7 @@ mu = 1.789E-5; %viscosity in Ns/m
 %http://www.aerodynamics4students.com/properties-of-the-atmosphere/sea-level-conditions.php
 
 v(1)=27000; %m/s
-deltat=.00001;
+deltat=.000001;
 time=deltat*z;
 
 %%
@@ -91,18 +91,20 @@ v_probe_with_deployment = zeros(1,z); %m/s
 a_probe_with_deployment = zeros(1,z); %m/s
 Fd_probe_with_deployment = zeros(1,z);
 rho=zeros(1,z);
-T_cord = 0;
+T_cord = zeros(1,z);
+current_time = zeros(1,z);  
 
 
 %initial velocity at deployment
 v_probe_with_deployment(1) = 27000; 
 
+    
 for i=1:z
     
-    if time >= 6000 
-        T_cord = 6000; %Torque/R_spool;
-        Fd_parachute = T_cord;
-        v_parachute = sqrt((2*Fd_parachute)/(rho_parachute*Cd*A_parachute));
+    if i*deltat > 600 
+        T_cord(i) = 6000000; %Torque/R_spool;
+        %Fd_parachute = T_cord;
+        %v_parachute = sqrt((2*Fd_parachute)/(rho_parachute*Cd*A_parachute));
     end 
     
     %probe iteration
@@ -118,7 +120,7 @@ for i=1:z
     %drag vector opposes velocity
     %ie if velocity is positive, drag vector is negative
     
-    a_probe_with_deployment(i) = (g-(Fd_probe_with_deployment(i)/m)-(T_cord/m));
+    a_probe_with_deployment(i) = (g-(Fd_probe_with_deployment(i)/m)-(T_cord(i)/m));
     %new accelration
     
     v_probe_with_deployment(i+1)=v_probe_with_deployment(i)+deltat*a_probe_with_deployment(i);
@@ -126,8 +128,6 @@ for i=1:z
     
     x_probe_with_deployment(i+1) = x_probe_with_deployment(i) + v_probe_with_deployment(i)*deltat + (a_probe_with_deployment(i)*deltat^2)/2;
     %current position
-    
-    
     
 end
 

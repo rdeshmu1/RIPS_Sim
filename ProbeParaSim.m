@@ -9,7 +9,7 @@ clear; clc; close all;
 m=5; % kg
 g=9.81; % kg/m2
 
-z=72000000;
+z=7200000000;
 
 Cd=.4; %drag coeff
 A_probe=.09; %m^2
@@ -18,8 +18,10 @@ mu = 1.789E-5; %viscosity in Ns/m
 %http://www.aerodynamics4students.com/properties-of-the-atmosphere/sea-level-conditions.php
 
 v(1)=27000; %m/s
-deltat=.000001;
+deltat=.000001; %s
 time=deltat*z;
+time_hours = time/60/60;
+
 
 %%
 
@@ -80,10 +82,10 @@ R_spool = 2; %m
 
 
 Cd_parachute = 1.4;
-v_parachute=zeros([1 1000]); %m/s
+v_parachute=zeros([1 ripcord]); %m/s
 %Fd_parachute=zeros([1 1000]);
 A_parachute = 10;
-rho_parachute = 500;
+
 
 %post deployment
 x_probe_with_deployment = zeros(1, z); %m
@@ -91,8 +93,7 @@ v_probe_with_deployment = zeros(1,z); %m/s
 a_probe_with_deployment = zeros(1,z); %m/s
 Fd_probe_with_deployment = zeros(1,z);
 rho=zeros(1,z);
-T_cord = zeros(1,z);
-current_time = zeros(1,z);  
+T_cord = 0; 
 
 
 %initial velocity at deployment
@@ -101,14 +102,15 @@ v_probe_with_deployment(1) = 27000;
     
 for i=1:z
     
-    if i*deltat > 600 
-        T_cord(i) = 6000000; %Torque/R_spool;
+    if i*deltat > 3600
+        T_cord = 6000000; %Torque/R_spool;
         %Fd_parachute = T_cord;
         %v_parachute = sqrt((2*Fd_parachute)/(rho_parachute*Cd*A_parachute));
-    end 
-    
+    end
+%     
     %probe iteration
     rho(i)=(3000/60000000)*x_probe_with_deployment(i);
+
     
     Fd_probe_with_deployment(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe_with_deployment(i)^2;
     %force due to drag
@@ -120,7 +122,7 @@ for i=1:z
     %drag vector opposes velocity
     %ie if velocity is positive, drag vector is negative
     
-    a_probe_with_deployment(i) = (g-(Fd_probe_with_deployment(i)/m)-(T_cord(i)/m));
+    a_probe_with_deployment(i) = (g-(Fd_probe_with_deployment(i)/m)-(T_cord/m));
     %new accelration
     
     v_probe_with_deployment(i+1)=v_probe_with_deployment(i)+deltat*a_probe_with_deployment(i);

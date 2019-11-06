@@ -1,3 +1,4 @@
+//https://www.arduino.cc/en/Tutorial/TransistorMotorControl
 // the transistor which controls the motor will be attached to digital pin 9
 int motorControl = 9;
 

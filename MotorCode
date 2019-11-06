@@ -32,4 +32,4 @@ void loop() {
   delay(600000); //now x should stay constant at 70 (terminal velocity) for the rest of the mission (10 minutes here)
   
 }
-Écrivez un message, @nom...
+

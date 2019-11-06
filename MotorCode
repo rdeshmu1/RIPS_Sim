@@ -1,0 +1,35 @@
+// the transistor which controls the motor will be attached to digital pin 9
+int motorControl = 9;
+
+void setup() {
+
+  // make the transistor's pin an output:
+  pinMode(motorControl, OUTPUT);  
+  Serial.begin(9600);
+
+}
+
+void loop() {
+  
+   int x = 255; //this is relative velocity or omega 3 (as high as it can be right now)
+   analogWrite(motorControl, x);
+   delay(120000); //wait 2 minutes to get up to speed, and give time to engage clutch
+   //clutch engagement equals deployment of parachute and the sudden start of unspooling
+
+   //ramp down the motor speed as the probe slows down due to parachute
+   for(int x = 255; x >= 70; x--){
+     analogWrite(motorControl, x);
+     //Serial.println(analogRead(x));
+     delay(50);
+   }   
+
+   //ramp up the motor speed
+   //for(int x = 0; x <= 255; x++){
+     //analogWrite(motorControl, x);
+     //delay(50);
+   //}
+
+  delay(600000); //now x should stay constant at 70 (terminal velocity) for the rest of the mission (10 minutes here)
+  
+}
+Écrivez un message, @nom...

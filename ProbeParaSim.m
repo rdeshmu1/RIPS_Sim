@@ -23,7 +23,7 @@ v_parachute=zeros([1 z]); %m/s
 Fd_parachute=zeros([1 z]);
 x_parachute = zeros([1 z]);
 rho_parachute = zeros([1 z]);
-current_i = zeros([1 z]); 
+m_parachute = 1; %kg 
 
 
 %probe values
@@ -44,23 +44,21 @@ check = zeros(1,z);
 time = 0:deltat:deltat*z;
 n=0;
 
+
 for i=1:z
-    
-    current_time = deltat*i;
     
     %probe iteration
     rho(i)=(3000/60000000)*x_probe(i);
     
-   if current_time > 3600 
-       if n <= ripcord
-        rho_parachute(i) = (3000/60000000)*x_probe(i-1);
+    if time(i) > 3600
+        rho_parachute(i) = (3000/60000000)*x_parachute(i);
         T_cord = Torque/R_spool;
-        Fd_parachute = T_cord;
-        v_parachute(i) = sqrt((2*Fd_parachute)/(rho_parachute(i)*Cd_parachute*A_parachute));
-        x_parachute(i) = x_probe(i) + n; 
-        n=n+1;
-       end
-   end
+%         Fd_parachute = T_cord;
+%         v_parachute(i) = sqrt((2*Fd_parachute)/(rho_parachute(i)*Cd_parachute*A_parachute));
+        %%accel???????
+        x_parachute(i) = x_probe(i);
+        A_probe = 300;
+    end
     
     Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;
     %force due to drag
@@ -82,12 +80,11 @@ for i=1:z
     %current position
     
     check(i+1) = 0;
- 
-    if current_time > 3600
-        A_probe = 300;
-        check(i+1) = -1000;
-    end
     
+    %     if time(i) > 3600
+    %         A_probe = 300;
+    %         check(i+1) = -1000;
+    %     end
 end
 
 figure

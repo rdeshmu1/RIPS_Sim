@@ -58,30 +58,27 @@ for i=1:z
     %probe iteration
     rho(i)=(3000/60000000)*x_probe(i);
 
-   
     %parachute
     if time(i) < 3600
         x_parachute(i) = x_probe(i); %only while parachute is inside
         v_parachute(i) = v_probe(i); %only while parachute is inside
 
     else
-        if r_new_spool < .3
-            r_new_spool(i) = .3;
-        else
+%         if r_new_spool < .3
+%             r_new_spool(i) = .3;
+%         else
             cord(i)=(x_parachute(i)-x_probe(i));
-            r_new_spool(i) = sqrt(pi*(r_total_spool^2*w_spool-r_cord^2*cord(i))/(pi*w_spool));
-            %deployment_time(i) = current_time;
+            %finds length of cord deployed 
+            r_new_spool(i) = sqrt(((pi*r_total_spool^2*w_spool)-(pi*r_cord^2*cord(i)))/(pi*w_spool));
             %at point of deployment
             T_cord = Torque/r_new_spool(i);
             %r_spool varies with time, torque depends on cord material
-            %if R_spool < ? exit loop
             Fd_parachute = T_cord;
             v_parachute(i+1) = sqrt((2*Fd_parachute)/(rho(i)*Cd_parachute*A_parachute));
             x_parachute(i+1) = x_parachute(i) + v_parachute(i)*deltat;
-            %position of parachute = velocity*deltat + previous position of parachute
-            %assume a accelration of 0
+            %assume an accelration of 0
             A_probe = 300;
-        end
+%         end
     end
     
     Fd_probe(i) = 1/2*rho(i)*A_probe*Cd_probe*v_probe(i)^2;

@@ -60,21 +60,20 @@ for i=1:z
     rho(i)=(3000/60000000)*x_probe(i);
     
     %parachute
-    if time(i) < 3600
+    if time(i) <= 3600
         x_parachute(i+1) = x_probe(i); %only while parachute is inside
         v_parachute(i+1) = v_probe(i); %only while parachute is inside
         
     else
         
-        cord(i+1)= abs((x_parachute(i)-x_probe(i)));
-        cord(36000000)= 0; 
+        cord(i)= abs((x_parachute(i-1)-x_probe(i-1)));
         
-        if cord(i+1) >= 1000
+        if cord(i) >= 1000
             check(i+1) = 1;
         else
             check(i+1) = 0;
             %finds length of cord deployed
-            r_new_spool(i) = sqrt((v_total_spool)-(pi*r_cord^2*cord(i+1)))/(pi*w_spool);
+            r_new_spool(i) = sqrt((v_total_spool)-(pi*r_cord^2*cord(i)))/(pi*w_spool);
             %at point of deployment
             T_cord(i) = Torque/r_new_spool(i);
             %r_spool varies with time, torque depends on cord material
@@ -122,7 +121,7 @@ ylabel('Probe Position (m)')
 figure
 plot(v_parachute)
 xlabel('Ripcord length (m/s)')
-ylabel('Parachute Velocity (m)')
+ylabel('Parachute Velocity (m/s)')
 
 %%
 % figure

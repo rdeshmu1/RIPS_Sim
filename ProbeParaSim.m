@@ -72,6 +72,7 @@ m_probe = 355; %kg
 %mass of probe 
 
 check = zeros(1,z);
+spool_check= zeros(1,z); 
 time = 0:deltat:deltat*z;
 %time vector
 n=0;
@@ -104,6 +105,12 @@ for i=1:z
             check(i+1) = 0;
    
             r_new_spool(i) = sqrt((v_total_spool)-(pi*r_cord^2*cord(i+1)))/(pi*w_spool);
+            
+            if r_new_spool(i) < .3
+                spool_check(i+1) = 1; 
+                %check not pertinent to dynamics of code 
+                %r_new_spool(i) = .3
+            end 
             %finds new radius of spool based on volume of cord deployed 
             T_cord(i) = Torque/r_new_spool(i);
             %finds changing T_cord 
